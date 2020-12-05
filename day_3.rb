@@ -375,35 +375,29 @@ path = '...........#..#.#.###....#.....
 .....#......#.........#..##.#..'
 
 def count_trees(path)
-  split_path = path.split('')
-  grid = []
-  section = []
+  grid = path.split("\n")
+
+  # grid = [] # Nested array => our grid of the path
+  section = [] # Individual rows in our grid
 
   trees = 0
-  position = 0
-  index = 0
+  position = 0 # Keep track of how many plots to the right we've gone
+  x = 0
+  index = 0 # Keep track of the index we need to check against
 
-  (1..split_path.length-1).each do |num|
-    if num % 31 == 0
-      grid << section
-      section = []
-    else
-      section << split_path[num]
-    end
-  end
-
-  grid.shift()
+  grid.shift() # we won't count the starting row since our first move is right 3, down 1
 
   # Move right 3 spots, down 1, and check to see if tree was encountered (#)
   grid.each do |row|
-    new_row = row.length - 1
-    row.each do |plot|
-      position += 3
-      index += 3;
-      if position > new_row
-        index = position % new_row
-      end
+
+    x += 1
+
+    position += 3
+    index += 3;
+    if position > 30
+      index = position % 31
     end
+
     if row[index] == '#'
       trees += 1
     end
