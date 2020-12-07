@@ -1,3 +1,63 @@
+const fs = require('fs');
+
+// Helper functions for Part 2 of Exercise
+const validateBirthYear = year => {
+  return (Number(year) < 1920 || Number(year) > 2002) ? false : true;
+};
+
+const validateIssueYear = year => {
+  return (Number(year) < 2010 || Number(year) > 2020) ? false : true;
+};
+
+const validateExpirationYear = year => {
+  return (Number(year) < 2020 || Number(year) > 2030) ? false : true;
+};
+
+const validateHeight = height => {
+  const measurement = height.slice(-2);
+  const value = height.substring(0, height.length - 2);
+  if (measurement === 'in') {
+    return (Number(value) < 59 || Number(value) > 76) ? false : true;
+  } else if (measurement === 'cm') {
+    return (Number(value) < 150 || Number(value) > 193) ? false : true;
+  }
+  return false;
+};
+
+const validateHair = color => {
+  const nums = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  let letters = ['a', 'b', 'c', 'd', 'e', 'f'];
+
+  if (color[0] === '#' && color.length === 7) {
+    for (let i = 1; i < 7; i++) {
+      if (nums.includes(color[i]) && letters.includes(color[i])) {
+        return false
+      }
+    }
+  } else {
+    return false;
+  }
+  return true;
+};
+
+const validateEyes = color => {
+  eyeColors = ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth'];
+  return eyeColors.includes(color) ? true : false;
+};
+
+const validateId = id => {
+  const nums = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  if (String(id).length === 9) {
+    for (let i = 0; i < id.length; i++) {
+      if (!nums.includes(String(id[i]))) {
+        return false;
+      }
+    }
+    return true
+  }
+  return false;
+};
+
 // --- Day 4: Passport Processing ---
 // You arrive at the airport only to realize that you grabbed your North Pole Credentials instead of your passport. While these documents are extremely similar, North Pole Credentials aren't issued by a country and therefore aren't actually valid documentation for travel in most of the world.
 
@@ -42,10 +102,9 @@
 
 // Count the number of valid passports - those that have all required fields. Treat cid as optional. In your batch file, how many passports are valid?
 
-const fs = require('fs');
 
 const passports = []; // Array of passport objects
-let count = 0; // Count of valid passports
+let validPassports = [];
 
 fs.readFile('./input/day_4.txt', 'utf-8', (err, data) => {
   if (err) {
@@ -82,15 +141,52 @@ fs.readFile('./input/day_4.txt', 'utf-8', (err, data) => {
     });
     // Iterate through each passport and add to count if valid
     passports.forEach(passport => {
-      // console.log(Object.keys(passport).length) 
       if (Object.keys(passport).length >= 8) {
-        count++;
+        validPassports.push(passport);
       } else if (Object.keys(passport).length === 7 && !Object.keys(passport).includes('cid')) {
-        count++;
+        validPassports.push(passport);
       } 
     });
 
-    console.log(count);
+    console.log(validPassports.length);
+
+    // --- Part Two ---
+    // The line is moving more quickly now, but you overhear airport security talking about how passports with invalid data are getting through. Better add some data validation, quick!
+
+    // You can continue to ignore the cid field, but each other field has strict rules about what values are valid for automatic validation:
+
+    // byr (Birth Year) - four digits; at least 1920 and at most 2002.
+    // iyr (Issue Year) - four digits; at least 2010 and at most 2020.
+    // eyr (Expiration Year) - four digits; at least 2020 and at most 2030.
+    // hgt (Height) - a number followed by either cm or in:
+    // If cm, the number must be at least 150 and at most 193.
+    // If in, the number must be at least 59 and at most 76.
+    // hcl (Hair Color) - a # followed by exactly six characters 0-9 or a-f.
+    // ecl (Eye Color) - exactly one of: amb blu brn gry grn hzl oth.
+    // pid (Passport ID) - a nine-digit number, including leading zeroes.
+    // cid (Country ID) - ignored, missing or not.
+
+    // Count the number of valid passports - those that have all required fields and valid values. Continue to treat cid as optional. In your batch file, how many passports are valid?
+
+    newValidCount = 0;
+
+    validPassports.forEach(passport => {
+      let validations = [
+        validateBirthYear(passport.byr),
+        validateIssueYear(passport.iyr),
+        validateExpirationYear(passport.eyr),
+        validateHeight(passport.hgt),
+        validateHair(passport.hcl),
+        validateEyes(passport.ecl),
+        validateId(passport.pid)
+      ];
+
+      if (!validations.includes(false)) {
+        newValidCount++;
+      }
+    });
+
+    console.log(newValidCount);
   }
 });
 
