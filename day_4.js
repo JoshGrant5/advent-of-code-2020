@@ -80,12 +80,12 @@ fs.readFile('./input/day_4.txt', 'utf-8', (err, data) => {
       }
       passports.push(passportObj);
     });
-
     // Iterate through each passport and add to count if valid
     passports.forEach(passport => {
-      if (Object.keys(passport).length === 8) {
+      // console.log(Object.keys(passport).length) 
+      if (Object.keys(passport).length >= 8) {
         count++;
-      } else if (Object.keys(passport).length < 8 && Object.keys(passport).includes('cid')) {
+      } else if (Object.keys(passport).length === 7 && !Object.keys(passport).includes('cid')) {
         count++;
       } 
     });
