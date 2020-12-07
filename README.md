@@ -1,8 +1,11 @@
-# advent-of-code-2020
+# Advent of Code 2020
+
 Daily exercises from https://adventofcode.com/
 
-#### Goal: Once completing a question in a particular language, I cannot use that language again for at least 3 days/challenges.
+#### Goal: Avoid completeing consecutive exercises using the same language
+
+#### Stretch Goal: Use at least 5 different languages throughout the challenge
 
 - Day 1: JavaScript (completed 12/04/20)
 - Day 2: Python (completed 12/04/20)
-- Day 3: Ruby (completed 12/04/20)
+- Day 3: Ruby (completed 12/05/20)
