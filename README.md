@@ -12,3 +12,4 @@ Daily exercises from https://adventofcode.com/
 - Day 4: JavaScript (completed 12/07/20)
 - Day 5: Python (completed 12/07/20)
 - Day 6: Ruby (completed 12/07/20)
+- Day 7: JavaScript (completed 12/07/20)
