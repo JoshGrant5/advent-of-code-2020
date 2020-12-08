@@ -98,14 +98,20 @@ fs.readFile('./input/day_7.txt', 'utf-8', (err, data) => {
           targets.push(bag);
         }
       });
-      console.log('THIS IS TARGETS AT THE START OF FUNCTION')
-      console.log(targets)
-      console.log('THIS IS ALLLLLLLL AT THE START OF FUNCTION')
-      console.log(all)
+      // console.log(targetBags)
       let allOptions = all;
-      allOptions = allOptions.length > 0 ? allOptions.concat(targetBags) : targetBags;
-      console.log('THIS IS ALL OPTIONSSSSSS')
-      console.log(allOptions)
+      if (allOptions.length > 0) {
+        for (const [key, value] of Object.entries(targetBags)) {
+        // for (let key of targets) {
+          if (!Object.keys(allOptions).includes(key)) {
+            // console.log(key)
+            // console.log(value)
+            allOptions.push(value);
+          }
+        }
+      } else {
+        allOptions = targetBags;
+      } 
       // Search through all of the bag objects for bags that contain bags in the targets array
       const newTargets = [];
       allBags.forEach(bags => {
@@ -117,8 +123,7 @@ fs.readFile('./input/day_7.txt', 'utf-8', (err, data) => {
           });
         }
       });
-      console.log('THIS IS NEW TARGETSSSSSSSS')
-      console.log(newTargets)
+   
       if (newTargets.length === 0) {
         return allOptions;
       } else {
