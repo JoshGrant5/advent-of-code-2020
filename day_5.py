@@ -50,42 +50,64 @@ def main():
   for line in content:
     row_chars = line[0:7]
     column_chars = line[7:]
+
+    # row_chars = content[1][0:7]
+    # column_chars = content[1][7:]
     # FIND ROW
+    start_point = 0
+    end_point = 127
     for num in range(7):
-      start_point = 0
-      end_point = 127
       # Divide the plane into the corresponding rows to search
       half = end_point - start_point
+       # split = math.floor(half / 2)
+
+  
+
       split = math.floor(half / 2)
+
+      print(split)
+
       # Search the rows based on Front or Back
       if num == 6:
         if row_chars[num] == 'F':
           row = start_point
+          print('The row is ' + row_chars[num] + ' and ' + str(start_point) + ' - ' + str(end_point))
+          print('Chosen ' + str(start_point))
         elif row_chars[num] == 'B':
           row = end_point
+          print('The row is ' + row_chars[num] + ' and ' + str(start_point) + ' - ' + str(end_point))
+          print('Chosen ' + str(end_point))
       else:
         if row_chars[num] == 'F':
-          end_point -= split
+          end_point -= split + 1
+          print('The row is ' + row_chars[num] + ' and ' + str(start_point) + ' - ' + str(end_point))
         elif row_chars[num] == 'B':
-          start_point += split
+          start_point += split + 1
+          print('The row is ' + row_chars[num] + ' and ' + str(start_point) + ' - ' + str(end_point))
     # FIND COLUMN
+    start_point = 0
+    end_point = 7
     for num in range(3):
-      start_point = 0
-      end_point = 7
       # Divide the plane into the corresponding columns to search
       half = end_point - start_point
       split = math.floor(half / 2)
+
+      print('col split is ', str(split))
       # Search the rows based on Front or Back
-      if num == 3:
-        if row_chars[num] == 'L':
+      if num == 2:
+        if column_chars[num] == 'L':
           column = start_point
-        elif row_chars[num] == 'R':
+          print(column_chars[num] + 'chosen ' + str(column))
+        elif column_chars[num] == 'R':
           column = end_point
+          print(column_chars[num] + 'chosen ' + str(column))
       else:
-        if row_chars[num] == 'L':
-          end_point -= split
-        elif row_chars[num] == 'R':
-          start_point += split
+        if column_chars[num] == 'L':
+          end_point -= split + 1
+          print('The col is ' + column_chars[num] + ' and ' + str(start_point) + ' - ' + str(end_point))
+        elif column_chars[num] == 'R':
+          start_point += split + 1
+          print('The col is ' + column_chars[num] + ' and ' + str(start_point) + ' - ' + str(end_point))
     # CALCULATE THE UNIQUE ID OF THE SEAT
     unique_id = (row * 8) + column
     # CHECK AGAINST THE HIGHEST ID
