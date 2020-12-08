@@ -36,10 +36,10 @@ fs.readFile('./input/day_7.txt', 'utf-8', (err, data) => {
     console.log('Error:', err);
   } else {
     const nums = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
-    const allBags = []; 
-    const allBagObjs = [];
-    const direct_bags = []; // bags that can hold our gold bag directly
-    const secondary_bags = []; // bags that hold bags in direct_bags
+    const allBags = []; // Array containing string info for each bag
+    const allBagObjs = [];  // Array containing all bag objects
+    const directBags = []; // Bags that can hold our shiny gold bag directly
+    const secondaryBags = []; // Bags that hold bags in direct_bags
 
     splitData = data.split('\n');
     
@@ -59,11 +59,12 @@ fs.readFile('./input/day_7.txt', 'utf-8', (err, data) => {
       });
       allBags.push(bagData)
     });
-    
     // Create a bagObj for each item in the allBags array
     allBags.forEach(items => {
       const bagObj = {};
-      const bag = items.shift();
+      let bag = items[0][0]; // Access the bag string 
+      bag = bag.slice(0, -1); // Remove the trailing space character
+
       bagObj[bag] = {};
       items.forEach(item => {
         item.forEach(data => {
@@ -72,7 +73,7 @@ fs.readFile('./input/day_7.txt', 'utf-8', (err, data) => {
           for (let i = 0; i < data.length; i++) {
             if (nums.includes(data[i])) {
               quantity = data[i];
-              color = data.slice(i + 2);
+              color = data.slice(i + 2, -1);
             }
           }
           if (color) {
@@ -82,7 +83,36 @@ fs.readFile('./input/day_7.txt', 'utf-8', (err, data) => {
       });
       allBagObjs.push(bagObj);
     });
-    
-    console.log(allBagObjs)
+    // Search through all of the bag objects to find bags that contain shiny gold
+    allBagObjs.forEach(items => {
+      for (let bag in items) {
+        if (Object.keys(items[bag]).includes('shiny gold')) {
+          directBags.push(items);
+        }
+      }
+    });
+    // Once we have our starting point with the list of direct bags, use recursion to find any other bag that could contain the direct bags
+    const examineBag = (allBags, targetBags) => {
+      const targets = [];
+      targetBags.forEach(bags => {
+        for (let bag in bags) {
+          targets.push(bag);
+        }
+      });
+      // Search through all of the bag objects for bags that contain bags in the targets array
+      const newTargets = [];
+      allBags.forEach(bags => {
+        for (let bag in bags) {
+          targets.forEach(targetBag => {
+            if (Object.keys(bags[bag]).includes(targetBag)) {
+              newTargets.push(bags);
+            }
+          });
+        }
+      });
+      return newTargets
+    };
+
+    console.log(examineBag(allBagObjs, directBags));
   }
 });
