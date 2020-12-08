@@ -160,19 +160,36 @@ fs.readFile('./input/day_7.txt', 'utf-8', (err, data) => {
 
     // How many individual bags are required inside your single shiny gold bag?
 
-    const examineGoldBag = (allBags, targetBags, count) => {
+    const examineGoldBag = (allBags, targetBags, multipliers, count) => {
       const targets = [];
+      // console.log('TARGET BAGSSSSS')
+      // console.log(targetBags)
+      const newMultipliers = [];
       let currentCount = Number(count);
-      targetBags.forEach(bags => {
-        for (let bag in bags) {
-          if (!targets.includes(bag)) {
-            targets.push(bag);
-            currentCount += Number(bags[bag]);
+      for (let i = 0; i < targetBags.length; i++) {
+        if (targetBags[i] !== {}) {
+          for (let bag in targetBags[i]) {
+            if (!targets.includes(bag)) {
+              targets.push(bag);
+              currentCount += Number(targetBags[i][bag]) * multipliers[i];
+              newMultipliers.push(Number(targetBags[i][bag]));
+            }
           }
         }
-      });
-      // let allOptions = all;
-      // allOptions = allOptions.length > 0 ? allOptions.concat(targets) : targets;
+      }
+      // targetBags.forEach(bags => {
+      //   // console.log('BAGSSSS')
+      //   // console.log(bags)
+      //   if (bags !== {}) {
+      //     for (let bag in bags) {
+      //       if (!targets.includes(bag)) {
+      //         targets.push(bag);
+      //         currentCount += Number(bags[bag]);
+      //         multipliers[bag] = Number(bags[bag]);
+      //       }
+      //     }
+      //   }
+      // });
       const newTargets = [];
       targets.forEach(target => {
         allBags.forEach(bags => {
@@ -186,10 +203,10 @@ fs.readFile('./input/day_7.txt', 'utf-8', (err, data) => {
       if (newTargets.length === 0) {
         return currentCount;
       } else {
-        return examineGoldBag(allBags, newTargets, currentCount);
+        return examineGoldBag(allBags, newTargets, newMultipliers, currentCount);
       }
     };
 
-    console.log(examineGoldBag(allBagObjs, [goldBag], [], 0));
+    console.log(examineGoldBag(allBagObjs, [goldBag], Object.values(goldBag), 0));
   }
 });
