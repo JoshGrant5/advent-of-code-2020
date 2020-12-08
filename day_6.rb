@@ -40,7 +40,7 @@
 
 file = File.open('./input/day_6.txt')
 
-file_data = file.readlines.map(&:chomp)
+file_data = file.readlines(chomp:true)
 
 forms = [] # An array containing all of the group arrays
 group = []
@@ -55,14 +55,14 @@ file_data.each do |data|
   end
 end
 
+if group.length > 0
+  forms.push(group)
+end
+
 forms.each do |group|
   answered_yes = []
   
   group.each do |answers|
-
-    puts 'ANSWERS'
-    puts answers
-
     (0..answers.length()).each do |num|
       if !answered_yes.include?(answers[num]) && answers[num]
         answered_yes.push(answers[num])
@@ -70,11 +70,6 @@ forms.each do |group|
     end
   end
 
-  puts 'ANSWERED YES'
-
-  puts answered_yes
-
-  
   sum += answered_yes.length()
 end
 
