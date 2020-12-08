@@ -62,44 +62,32 @@ end
 
 forms.each do |group|
   answered_yes = []
-  everyone_answered_yes = []
-  yes_check = []
-  count = 1
-
 
   group.each do |answers|
-    prev_yes_check = yes_check
-    yes_check = []
-
     (0..answers.length()).each do |num|
       if !answered_yes.include?(answers[num]) && answers[num]
         answered_yes.push(answers[num])
       end
-
-      if count === group.length()
-        everyone_answered_yes = prev_yes_check
-        # if everyone_answered_yes.include?(answers[num])
-        #   everyone_answered_yes.push(answers[num])
-        # end
-      elsif count > 1
-        if prev_yes_check.include?(answers[num])
-          yes_check.push(answers[num])
-        end
-      else
-        if !yes_check.include?(answers[num]) && answers[num]
-          yes_check.push(answers[num])
-        end
-      end
     end  
+  end
 
-    count += 1
+  answered_yes.each do |answer|
+    count = 0
+    group.each do |answers|
+      if answers.include?(answer)
+        count += 1
+      end
+    end
+    if count === group.length()
+      sum_2 += 1
+    end
   end
 
   sum_1 += answered_yes.length()
-  sum_2 += everyone_answered_yes.length()
 end
 
 puts sum_1
+puts sum_2
 
 # --- Part Two ---
 # As you finish the last group's customs declaration, you notice that you misread one word in the instructions:
@@ -133,7 +121,5 @@ puts sum_1
 # In this example, the sum of these counts is 3 + 0 + 1 + 1 + 1 = 6.
 
 # For each group, count the number of questions to which everyone answered "yes". What is the sum of those counts?
-
-puts sum_2
 
 file.close
