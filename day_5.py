@@ -43,6 +43,7 @@ def main():
   row = 0
   column = 0
   highest_id = 0
+  boarding_passes = []
 
   with open('./input/day_5.txt') as f:
     content = f.read().splitlines()
@@ -50,9 +51,6 @@ def main():
   for line in content:
     row_chars = line[0:7]
     column_chars = line[7:]
-
-    # row_chars = content[1][0:7]
-    # column_chars = content[1][7:]
     # FIND ROW
     start_point = 0
     end_point = 127
@@ -60,61 +58,62 @@ def main():
       # Divide the plane into the corresponding rows to search
       half = end_point - start_point
        # split = math.floor(half / 2)
-
-  
-
-      split = math.floor(half / 2)
-
-      print(split)
-
+      split = math.ceil(half / 2)
       # Search the rows based on Front or Back
       if num == 6:
         if row_chars[num] == 'F':
           row = start_point
-          print('The row is ' + row_chars[num] + ' and ' + str(start_point) + ' - ' + str(end_point))
-          print('Chosen ' + str(start_point))
         elif row_chars[num] == 'B':
           row = end_point
-          print('The row is ' + row_chars[num] + ' and ' + str(start_point) + ' - ' + str(end_point))
-          print('Chosen ' + str(end_point))
       else:
         if row_chars[num] == 'F':
-          end_point -= split + 1
-          print('The row is ' + row_chars[num] + ' and ' + str(start_point) + ' - ' + str(end_point))
+          end_point -= split 
         elif row_chars[num] == 'B':
-          start_point += split + 1
-          print('The row is ' + row_chars[num] + ' and ' + str(start_point) + ' - ' + str(end_point))
+          start_point += split 
     # FIND COLUMN
     start_point = 0
     end_point = 7
     for num in range(3):
       # Divide the plane into the corresponding columns to search
       half = end_point - start_point
-      split = math.floor(half / 2)
-
-      print('col split is ', str(split))
+      split = math.ceil(half / 2)
       # Search the rows based on Front or Back
       if num == 2:
         if column_chars[num] == 'L':
           column = start_point
-          print(column_chars[num] + 'chosen ' + str(column))
         elif column_chars[num] == 'R':
           column = end_point
-          print(column_chars[num] + 'chosen ' + str(column))
       else:
         if column_chars[num] == 'L':
-          end_point -= split + 1
-          print('The col is ' + column_chars[num] + ' and ' + str(start_point) + ' - ' + str(end_point))
+          end_point -= split 
         elif column_chars[num] == 'R':
-          start_point += split + 1
-          print('The col is ' + column_chars[num] + ' and ' + str(start_point) + ' - ' + str(end_point))
-    # CALCULATE THE UNIQUE ID OF THE SEAT
+          start_point += split
+    # CALCULATE THE UNIQUE ID OF THE SEAT & ADD TO ARRAY OF ALL IDs
     unique_id = (row * 8) + column
+    boarding_passes.append(unique_id)
     # CHECK AGAINST THE HIGHEST ID
     if unique_id > highest_id:
       highest_id = unique_id
 
   print(highest_id)
+
+  #   --- Part Two ---
+  # Ding! The "fasten seat belt" signs have turned on. Time to find your seat.
+
+  # It's a completely full flight, so your seat should be the only missing boarding pass in your list. However, there's a catch: some of the seats at the very front and back of the plane don't exist on this aircraft, so they'll be missing from your list as well.
+
+  # Your seat wasn't at the very front or back, though; the seats with IDs +1 and -1 from yours will be in your list.
+
+  # What is the ID of your seat?
+
+  smallest = min(boarding_passes)
+  largest = max(boarding_passes)
+
+  for num in range(smallest, largest):
+    if num not in boarding_passes:
+      missing_num = num
+
+  print(missing_num)
 
 if __name__== "__main__":
   main()
