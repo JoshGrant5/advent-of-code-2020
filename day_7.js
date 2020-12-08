@@ -95,29 +95,39 @@ fs.readFile('./input/day_7.txt', 'utf-8', (err, data) => {
       const targets = [];
       targetBags.forEach(bags => {
         for (let bag in bags) {
-          targets.push(bag);
-        }
-      });
-      // console.log(targetBags)
-      let allOptions = all;
-      if (allOptions.length > 0) {
-        for (const [key, value] of Object.entries(targetBags)) {
-        // for (let key of targets) {
-          if (!Object.keys(allOptions).includes(key)) {
-            // console.log(key)
-            // console.log(value)
-            allOptions.push(value);
+          if (!targets.includes(bag)) {
+            targets.push(bag);
           }
         }
-      } else {
-        allOptions = targetBags;
-      } 
+      });
+      // console.log('TARGET BAGSSSSSSS')
+      // console.log(targets)
+      let allOptions = all;
+      allOptions = allOptions.length > 0 ? allOptions.concat(targets) : targets;
+      // if (allOptions.length > 0) {
+      //   // for (const [key, value] of Object.entries(targetBags)) {
+      //   for (let key of targets) {
+      //     if (!Object.keys(allOptions).includes(key)) {
+      //       // console.log(key)
+      //       // console.log(targetBags)
+      //       // console.log(value)
+      //       allOptions.push(key);
+      //     }
+      //   }
+      // } else {
+      //   allOptions = targetBags;
+      // } 
       // Search through all of the bag objects for bags that contain bags in the targets array
+      // console.log('ALL OPTIONSSSS')
+      // console.log(allOptions)
       const newTargets = [];
       allBags.forEach(bags => {
+
         for (let bag in bags) {
+         
           targets.forEach(targetBag => {
             if (Object.keys(bags[bag]).includes(targetBag)) {
+              if (!Object.keys(newTargets).includes(bag))
               newTargets.push(bags);
             }
           });
@@ -132,6 +142,13 @@ fs.readFile('./input/day_7.txt', 'utf-8', (err, data) => {
     };
 
     const finalBags = examineBag(allBagObjs, directBags, []);
-    console.log(finalBags.length);
+
+    let testBags = []
+    for (let bag of finalBags) {
+      if (!testBags.includes(bag)) {
+        testBags.push(bag)
+      }
+    }
+    console.log(testBags.length);
   }
 });
