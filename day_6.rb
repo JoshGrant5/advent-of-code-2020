@@ -57,14 +57,23 @@ end
 
 forms.each do |group|
   answered_yes = []
-
+  
   group.each do |answers|
+
+    puts 'ANSWERS'
+    puts answers
+
     (0..answers.length()).each do |num|
-      if !answered_yes.include?(answers[num])
+      if !answered_yes.include?(answers[num]) && answers[num]
         answered_yes.push(answers[num])
       end
     end
   end
+
+  puts 'ANSWERED YES'
+
+  puts answered_yes
+
   
   sum += answered_yes.length()
 end
