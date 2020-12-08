@@ -39,6 +39,7 @@ fs.readFile('./input/day_7.txt', 'utf-8', (err, data) => {
     const allBags = []; // Array containing string info for each bag
     const allBagObjs = [];  // Array containing all bag objects
     const directBags = []; // Bags that can hold our shiny gold bag directly
+    let goldBag; // Our bag object for use in part 2
 
     splitData = data.split('\n');
     
@@ -85,11 +86,15 @@ fs.readFile('./input/day_7.txt', 'utf-8', (err, data) => {
     // Search through all of the bag objects to find bags that contain shiny gold
     allBagObjs.forEach(items => {
       for (let bag in items) {
+        if (bag === 'shiny gold') {
+          goldBag = items[bag];
+        }
         if (Object.keys(items[bag]).includes('shiny gold')) {
           directBags.push(items);
         }
       }
     });
+
     // Once we have our starting point with the list of direct bags, use recursion to find any other bag that could contain the direct bags
     const examineBag = (allBags, targetBags, all) => {
       const targets = [];
@@ -100,31 +105,11 @@ fs.readFile('./input/day_7.txt', 'utf-8', (err, data) => {
           }
         }
       });
-      // console.log('TARGET BAGSSSSSSS')
-      // console.log(targets)
       let allOptions = all;
       allOptions = allOptions.length > 0 ? allOptions.concat(targets) : targets;
-      // if (allOptions.length > 0) {
-      //   // for (const [key, value] of Object.entries(targetBags)) {
-      //   for (let key of targets) {
-      //     if (!Object.keys(allOptions).includes(key)) {
-      //       // console.log(key)
-      //       // console.log(targetBags)
-      //       // console.log(value)
-      //       allOptions.push(key);
-      //     }
-      //   }
-      // } else {
-      //   allOptions = targetBags;
-      // } 
-      // Search through all of the bag objects for bags that contain bags in the targets array
-      // console.log('ALL OPTIONSSSS')
-      // console.log(allOptions)
       const newTargets = [];
       allBags.forEach(bags => {
-
-        for (let bag in bags) {
-         
+        for (let bag in bags) {  
           targets.forEach(targetBag => {
             if (Object.keys(bags[bag]).includes(targetBag)) {
               if (!Object.keys(newTargets).includes(bag))
@@ -133,22 +118,78 @@ fs.readFile('./input/day_7.txt', 'utf-8', (err, data) => {
           });
         }
       });
-   
       if (newTargets.length === 0) {
-        return allOptions;
+        let finalBags = []
+        for (let bag of allOptions) {
+          if (!finalBags.includes(bag)) {
+            finalBags.push(bag)
+          }
+        }
+        return finalBags;
       } else {
         return examineBag(allBags, newTargets, allOptions);
       }
     };
 
-    const finalBags = examineBag(allBagObjs, directBags, []);
+    const output = examineBag(allBagObjs, directBags, []);
+    console.log(output.length);
 
-    let testBags = []
-    for (let bag of finalBags) {
-      if (!testBags.includes(bag)) {
-        testBags.push(bag)
+    // --- Part Two ---
+    // It's getting pretty expensive to fly these days - not because of ticket prices, but because of the ridiculous number of bags you need to buy!
+
+    // Consider again your shiny gold bag and the rules from the above example:
+
+    // faded blue bags contain 0 other bags.
+    // dotted black bags contain 0 other bags.
+    // vibrant plum bags contain 11 other bags: 5 faded blue bags and 6 dotted black bags.
+    // dark olive bags contain 7 other bags: 3 faded blue bags and 4 dotted black bags.
+    // So, a single shiny gold bag must contain 1 dark olive bag (and the 7 bags within it) plus 2 vibrant plum bags (and the 11 bags within each of those): 1 + 1*7 + 2 + 2*11 = 32 bags!
+
+    // Of course, the actual rules have a small chance of going several levels deeper than this example; be sure to count all of the bags, even if the nesting becomes topologically impractical!
+
+    // Here's another example:
+
+    // shiny gold bags contain 2 dark red bags.
+    // dark red bags contain 2 dark orange bags.
+    // dark orange bags contain 2 dark yellow bags.
+    // dark yellow bags contain 2 dark green bags.
+    // dark green bags contain 2 dark blue bags.
+    // dark blue bags contain 2 dark violet bags.
+    // dark violet bags contain no other bags.
+    // In this example, a single shiny gold bag must contain 126 other bags.
+
+    // How many individual bags are required inside your single shiny gold bag?
+
+    const examineGoldBag = (allBags, targetBags, count) => {
+      const targets = [];
+      let currentCount = Number(count);
+      targetBags.forEach(bags => {
+        for (let bag in bags) {
+          if (!targets.includes(bag)) {
+            targets.push(bag);
+            currentCount += Number(bags[bag]);
+          }
+        }
+      });
+      // let allOptions = all;
+      // allOptions = allOptions.length > 0 ? allOptions.concat(targets) : targets;
+      const newTargets = [];
+      targets.forEach(target => {
+        allBags.forEach(bags => {
+          for (let bag in bags) {
+            if (bag === target) {
+              newTargets.push(bags[bag]);
+            }
+          }
+        });
+      });
+      if (newTargets.length === 0) {
+        return currentCount;
+      } else {
+        return examineGoldBag(allBags, newTargets, currentCount);
       }
-    }
-    console.log(testBags.length);
+    };
+
+    console.log(examineGoldBag(allBagObjs, [goldBag], [], 0));
   }
 });
