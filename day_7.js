@@ -39,7 +39,6 @@ fs.readFile('./input/day_7.txt', 'utf-8', (err, data) => {
     const allBags = []; // Array containing string info for each bag
     const allBagObjs = [];  // Array containing all bag objects
     const directBags = []; // Bags that can hold our shiny gold bag directly
-    const secondaryBags = []; // Bags that hold bags in direct_bags
 
     splitData = data.split('\n');
     
@@ -92,13 +91,21 @@ fs.readFile('./input/day_7.txt', 'utf-8', (err, data) => {
       }
     });
     // Once we have our starting point with the list of direct bags, use recursion to find any other bag that could contain the direct bags
-    const examineBag = (allBags, targetBags) => {
+    const examineBag = (allBags, targetBags, all) => {
       const targets = [];
       targetBags.forEach(bags => {
         for (let bag in bags) {
           targets.push(bag);
         }
       });
+      console.log('THIS IS TARGETS AT THE START OF FUNCTION')
+      console.log(targets)
+      console.log('THIS IS ALLLLLLLL AT THE START OF FUNCTION')
+      console.log(all)
+      let allOptions = all;
+      allOptions = allOptions.length > 0 ? allOptions.concat(targetBags) : targetBags;
+      console.log('THIS IS ALL OPTIONSSSSSS')
+      console.log(allOptions)
       // Search through all of the bag objects for bags that contain bags in the targets array
       const newTargets = [];
       allBags.forEach(bags => {
@@ -110,9 +117,16 @@ fs.readFile('./input/day_7.txt', 'utf-8', (err, data) => {
           });
         }
       });
-      return newTargets
+      console.log('THIS IS NEW TARGETSSSSSSSS')
+      console.log(newTargets)
+      if (newTargets.length === 0) {
+        return allOptions;
+      } else {
+        return examineBag(allBags, newTargets, allOptions);
+      }
     };
 
-    console.log(examineBag(allBagObjs, directBags));
+    const finalBags = examineBag(allBagObjs, directBags, []);
+    console.log(finalBags.length);
   }
 });
