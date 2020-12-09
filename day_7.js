@@ -87,7 +87,7 @@ fs.readFile('./input/day_7.txt', 'utf-8', (err, data) => {
     allBagObjs.forEach(items => {
       for (let bag in items) {
         if (bag === 'shiny gold') {
-          goldBag = items[bag];
+          goldBag = items;
         }
         if (Object.keys(items[bag]).includes('shiny gold')) {
           directBags.push(items);
@@ -160,46 +160,57 @@ fs.readFile('./input/day_7.txt', 'utf-8', (err, data) => {
 
     // How many individual bags are required inside your single shiny gold bag?
 
-    const examineGoldBag = (allBags, targetBags, multipliers, count) => {
-      const targets = [];
-      const newMultipliers = [];
-      // console.log('MULTIPLIER')
-      // console.log(multipliers)
-      // console.log('TARGET BAGSSSSS')
-      let currentCount = Number(count);
+    // const examineGoldBag = (allBags, targetBags, prevTargets, count) => {
+    //   const targets = [];
+    //   let currentCount = Number(count);
 
+    //   // console.log('TARRRGEEEEEEEET')
+    //   // console.log(targetBags)
 
+    //   // console.log('PREVVVVVVVVVV')
+    //   // console.log(prevTargets)
+   
+    //   targetBags.forEach(items => {
+    //     for (let bags in items) {
+    //       for (let bag in items[bags]) {
+    //         console.log(bag)
+    //         prevTargets.forEach(prev => {
+    //           for (let prevBag in prev) {
+    //             if (prevBag === bag) {
+    //               console.log(prevBag)
+    //             }
+    //           }
+    //         });
+  
+    //         targets.push(bag);
+    //         currentCount += Number(bags[bag]) 
+    //       }
+    //     }
+    //   })
 
-      for (let i = 0; i < targetBags.length; i++) {
+    //   const newTargets = [];
+    //   targets.forEach(target => {
+    //     allBags.forEach(bags => {
+    //       for (let bag in bags) {
+    //         if (bag === target) {
+    //           newTargets.push(bags[bag]);
+    //         }
+    //       }
+    //     });
+    //   });
 
-        if (targetBags[i] !== {}) {
-          for (let bag in targetBags[i]) {
-            console.log(bag)
-            // if (!targets.includes(bag)) {
-              targets.push(bag);
-              currentCount += Number(targetBags[i][bag]) * multipliers[i];
-              newMultipliers.push(Number(targetBags[i][bag]));
-            // }
-          }
-        }
-      }
-      const newTargets = [];
-      targets.forEach(target => {
-        allBags.forEach(bags => {
-          for (let bag in bags) {
-            if (bag === target) {
-              newTargets.push(bags[bag]);
-            }
-          }
-        });
-      });
-      if (newTargets.length === 0) {
-        return currentCount;
-      } else {
-        return examineGoldBag(allBags, newTargets, newMultipliers, currentCount);
-      }
-    };
+    //   // console.log('NEW TARGETTTTT')
+    //   // console.log(newTargets)
+    //   // console.log('PREV TARGETSSSSSSS')
+    //   // console.log(prevTargets)
+   
+    //   if (newTargets.length === 0) {
+    //     return currentCount;
+    //   } else {
+    //     return examineGoldBag(allBags, newTargets, targetBags, currentCount);
+    //   }
+    // };
 
-    console.log(examineGoldBag(allBagObjs, [goldBag], Object.values(goldBag), 0));
+    // console.log(examineGoldBag(allBagObjs, [goldBag], [], 0));
   }
 });
