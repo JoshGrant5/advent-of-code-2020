@@ -162,34 +162,27 @@ fs.readFile('./input/day_7.txt', 'utf-8', (err, data) => {
 
     const examineGoldBag = (allBags, targetBags, multipliers, count) => {
       const targets = [];
-      // console.log('TARGET BAGSSSSS')
-      // console.log(targetBags)
       const newMultipliers = [];
+      // console.log('MULTIPLIER')
+      // console.log(multipliers)
+      // console.log('TARGET BAGSSSSS')
       let currentCount = Number(count);
+
+
+
       for (let i = 0; i < targetBags.length; i++) {
+
         if (targetBags[i] !== {}) {
           for (let bag in targetBags[i]) {
-            if (!targets.includes(bag)) {
+            console.log(bag)
+            // if (!targets.includes(bag)) {
               targets.push(bag);
               currentCount += Number(targetBags[i][bag]) * multipliers[i];
               newMultipliers.push(Number(targetBags[i][bag]));
-            }
+            // }
           }
         }
       }
-      // targetBags.forEach(bags => {
-      //   // console.log('BAGSSSS')
-      //   // console.log(bags)
-      //   if (bags !== {}) {
-      //     for (let bag in bags) {
-      //       if (!targets.includes(bag)) {
-      //         targets.push(bag);
-      //         currentCount += Number(bags[bag]);
-      //         multipliers[bag] = Number(bags[bag]);
-      //       }
-      //     }
-      //   }
-      // });
       const newTargets = [];
       targets.forEach(target => {
         allBags.forEach(bags => {
