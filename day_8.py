@@ -45,6 +45,8 @@ def main():
   with open('./input/day_8.txt') as f:
     content = f.read().splitlines()
 
+  print(content)
+
   def part_one():
     accumulator = 0 # Starting value for the accumulator
     indexes = [] # keep track of which indexes have been hit. If the index we are looking at is inside this array, we terminate the program
@@ -100,35 +102,43 @@ def main():
 
   # Fix the program so that it terminates normally by changing exactly one jmp (to nop) or nop (to jmp). What is the value of the accumulator after the program terminates?
 
-  def part_two():
-    accumulator = 0 # Starting value for the accumulator
-    indexes = [] # keep track of which indexes have been hit. If the index we are looking at is inside this array, we terminate the program
+  # def part_two():
+  #   accumulator = 0 # Starting value for the accumulator
+  #   index = 0
 
-    index = 0
+  #   while index < len(content):
+  #     instruction = content[index][:3]
+  #     num = int(content[index][3:])
+  #     if instruction == 'acc':
+  #       accumulator += num
+  #       index += 1
+  #     elif instruction == 'jmp':
 
-    while index not in indexes:
-      if index < len(content) - 1:
-        instruction = content[index][:3]
-        num = int(content[index][3:])
-        indexes.append(index)
-        if instruction == 'acc':
-          accumulator += num
-          index += 1
-        elif instruction == 'jmp':
-          if content[index + 1][:3] == 'acc' and (int(content[index + 1][3:]) + index) > len(content):
-            index += 1
-          else:
-            index += num
-        else:
-          index += 1
-      else:
-        break
+  #       if num < 0:
+  #         check = []
+  #         for action in content[index:]:
+  #           check.append(action[:3])
+  #         if 'jmp' not in check:
+  #             index += 1
 
-    print(accumulator)
+  #       elif content[index + 1][:3] == 'acc' and index + 1 == len(content) - 1:
+  #         index += 1
+
+  #       elif index + 1 == len(content): # if this jmp is final instruction in the contents array
+  #         index += 1
+  #       else:
+  #         index += num
+  #     else: # instruction == 'nop'
+  #       if content[index + num][:3] == 'acc' and index + num == len(content) - 1:
+  #         index += num
+  #       else:
+  #         index += 1
+
+  #   print(accumulator)
 
 
   part_one()
-  part_two()
+  # part_two()
 
 if __name__== "__main__":
   main()
