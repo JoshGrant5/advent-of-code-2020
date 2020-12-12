@@ -53,6 +53,7 @@ def part_one(file_data)
     pass = 0
     if num > 24
       ref = file_data[num - 25..num - 1]
+      # Iterate though the previous 25 numbers to find a pair that sum to the current target number
       (0..ref.length - 1).each do |ref1|
         (1..ref.length).each do |ref2|
           if ref[ref1].to_i + ref[ref2].to_i == file_data[num].to_i
@@ -61,6 +62,7 @@ def part_one(file_data)
         end
       end
       if pass == 0
+        # If we do not have any passes in this sequence, we have found the num we are looking for
         return file_data[num]
       end
     end
@@ -101,7 +103,7 @@ end
 # What is the encryption weakness in your XMAS-encrypted list of numbers?
 
 # preamble for sample is 127 => looking for [15, 25, 47, 40] as output
-sample = ['35', '20', '15', '25', '47', '40', '62', '55', '65', '95', '102', '117', '150', '182', '127', '219', '299', '277', '309', '576']
+# sample = ['35', '20', '15', '25', '47', '40', '62', '55', '65', '95', '102', '117', '150', '182', '127', '219', '299', '277', '309', '576']
 
 def part_two(file_data, target)
   (0..file_data.length).each do |num|
@@ -109,39 +111,29 @@ def part_two(file_data, target)
       ref = file_data.slice(0, num)
       (0..ref.length - 1).each do |ref1|
         sum = ref[ref1].to_i
-        range = [ref[ref1]]
+        range = [ref[ref1].to_i]
         (ref1 + 1..ref.length).each do |ref2|
           sum += ref[ref2].to_i
-          range << ref[ref2]
+          range << ref[ref2].to_i
           if sum == target.to_i
-            puts 'WE HAVE IT'
-            puts range
-            puts 'END OF RANGE'
+            # We have our range, now search for smallest and largest nums in range
+            smallest = 0
+            largest = 0
+            range.each do |num|
+              if num > smallest
+                smallest = num
+              elsif num < largest
+                largest = num
+              end
+            end
+            return smallest + largest
           end
           break if sum > target.to_i
         end
-        puts 'THIS IS SUM'
-        puts sum
       end
     end
-
- 
-  #   pass = 0
-  #   if num > 24
-  #     ref = file_data[num - 25..num - 1]
-  #     (0..ref.length - 1).each do |ref1|
-  #       (1..ref.length).each do |ref2|
-  #         if ref[ref1].to_i + ref[ref2].to_i == file_data[num].to_i
-  #           pass += 1
-  #         end
-  #       end
-  #     end
-  #     if pass == 0
-  #       return file_data[num]
-  #     end
-  #   end
   end
 end
 
-puts part_two(sample, '127')
-# puts part_two(file_data, part_one(file_data))
+# puts part_two(sample, '127')
+puts part_two(file_data, part_one(file_data))
