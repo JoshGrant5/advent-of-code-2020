@@ -117,12 +117,12 @@ def part_two(file_data, target)
           range << ref[ref2].to_i
           if sum == target.to_i
             # We have our range, now search for smallest and largest nums in range
-            smallest = 0
             largest = 0
+            smallest = range[0]
             range.each do |num|
-              if num > smallest
+              if num < smallest
                 smallest = num
-              elsif num < largest
+              elsif num > largest
                 largest = num
               end
             end
