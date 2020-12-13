@@ -42,39 +42,45 @@
 // Finally, your device's built-in adapter is always 3 higher than the highest adapter, so its rating is 22 jolts (always a difference of 3).
 // In this example, when using every adapter, there are 7 differences of 1 jolt and 5 differences of 3 jolts.
 
-// Here is a larger example:
-
-// 28
-// 33
-// 18
-// 42
-// 31
-// 14
-// 46
-// 20
-// 48
-// 47
-// 24
-// 23
-// 49
-// 45
-// 19
-// 38
-// 39
-// 11
-// 1
-// 32
-// 25
-// 35
-// 8
-// 17
-// 7
-// 9
-// 4
-// 2
-// 34
-// 10
-// 3
-// In this larger example, in a chain that uses all of the adapters, there are 22 differences of 1 jolt and 10 differences of 3 jolts.
-
 // Find a chain that uses all of your adapters to connect the charging outlet to your device's built-in adapter and count the joltage differences between the charging outlet, the adapters, and your device. What is the number of 1-jolt differences multiplied by the number of 3-jolt differences?
+
+const fs = require('fs');
+
+const sample = ['16', '10', '15', '5', '1', '11', '7', '19', '6', '12', '4']; // 7 diff of 1, 5 diff of 3 (including your built in adapter which is always a diff of 3)
+
+fs.readFile('./input/day_10.txt', 'utf-8', (err, data) => {
+  if (err) {
+    console.log('Error:', err);
+  } else {
+    let current = 0;
+    const used = [];
+    let one = 0;
+    let three = 0;
+
+    splitData = data.split('\n');
+
+    sample.forEach(() => {
+      let index = 0;
+      let checked = 0;
+      let target = 1;
+      while (checked <= sample.length) {
+        if (index === sample.length) {
+          target++;
+          index = 0;
+        }
+        if (Number(sample[index]) - current === target && !used.includes(sample[index])) {
+          current = sample[index];
+          checked++;
+          used.push(sample[index]);
+          target < 2 ? one++ : three++;
+          break;
+        } 
+        index++;
+      }  
+    });
+    three++; // For your built in adapter which is always a +3
+
+    console.log(one)
+    console.log(three)
+  }
+});
