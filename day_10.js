@@ -59,19 +59,27 @@ fs.readFile('./input/day_10.txt', 'utf-8', (err, data) => {
 
     splitData = data.split('\n');
 
-    sample.forEach(() => {
+    // console.log(splitData.length)
+
+    splitData.forEach(() => {
       let index = 0;
       let checked = 0;
       let target = 1;
-      while (checked <= sample.length) {
-        if (index === sample.length) {
+      // console.log(`TARGET ${target}`)
+      // console.log(`INDEX ${index}`)
+      // console.log(`ONE ${one}`)
+      // console.log(`THREE ${three}`)
+
+      while (checked !== splitData.length) {
+        if (index === splitData.length) {
           target++;
           index = 0;
-        }
-        if (Number(sample[index]) - current === target && !used.includes(sample[index])) {
-          current = sample[index];
           checked++;
-          used.push(sample[index]);
+        }
+        if (Number(splitData[index]) - current === target && !used.includes(splitData[index])) {
+          current = splitData[index];
+          checked++;
+          used.push(splitData[index]);
           target < 2 ? one++ : three++;
           break;
         } 
@@ -80,7 +88,6 @@ fs.readFile('./input/day_10.txt', 'utf-8', (err, data) => {
     });
     three++; // For your built in adapter which is always a +3
 
-    console.log(one)
-    console.log(three)
+    console.log(one * three)
   }
 });
